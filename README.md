@@ -6,7 +6,7 @@ This is an adaptation of [Sypex Geo Library](https://sypexgeo.net/) for Symfony2
 Installation
 ------------
 
-### Step 1: Download FOSUserBundle using composer
+### Step 1: Download YamilovSSypexGeoBundle using composer
 
 Add YamilovSSypexGeoBundle by running the command:
 
