@@ -42,7 +42,8 @@ Download necessary databases to `src/YourCompanyName/YourBundle/SypexGeoDatabase
 # app/config/config.yml
 
 sypex_geo:
-    city_database_path: YourCompanyName\YourBundle\SypexGeoDatabase\SxGeoCity.dat
+    mode: SXGEO_FILE # SXGEO_FILE (default) | SXGEO_BATCH | SXGEO_MEMORY
+    database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
 
 ### Step 5: In your controller
