@@ -1,3 +1,0 @@
-yamilov_s_sypex_geo_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: YamilovSSypexGeoBundle:Default:index }
