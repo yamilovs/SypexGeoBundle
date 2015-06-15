@@ -1,0 +1,4 @@
+services:
+#    yamilov_s_sypex_geo.example:
+#        class: YamilovS\SypexGeoBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
