@@ -1,1 +1,4 @@
 services:
+    sypex_geo.manager:
+        class: YamilovS\SypexGeoBundle\Manager\SypexGeoManager
+        arguments: [@service_container]
