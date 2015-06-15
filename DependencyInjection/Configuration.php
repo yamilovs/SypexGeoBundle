@@ -22,7 +22,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('city_database_path')->defaultFalse()->end()
+                ->scalarNode('mode')->defaultValue('SXGEO_FILE')->end()
+                ->scalarNode('database_path')->defaultFalse()->end()
             ->end()
         ;
 

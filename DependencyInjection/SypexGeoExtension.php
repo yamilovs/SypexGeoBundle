@@ -25,6 +25,7 @@ class SypexGeoExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('sypex_geo.city_database_path', $config['city_database_path']);
+        $container->setParameter('sypex_geo.database_path', $config['database_path']);
+        $container->setParameter('sypex_geo.mode', $config['mode']);
     }
 }
