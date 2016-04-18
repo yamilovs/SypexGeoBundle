@@ -20,16 +20,25 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $tmpFileName = sha1(uniqid(mt_rand(), true));
-        $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
-        $newDatabaseFileArchive = file_get_contents(self::DATABASE_FILE_LINK);
-        $path = $this->getContainer()->get('kernel')->locateResource($this->getContainer()->getParameter('yamilovs_sypex_geo.database_path'));
-        $zip = new \ZipArchive;
+        $configPath     = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
+        $fileLocator    = $this->getContainer()->get('file_locator');
+        $tmpFileName    = sha1(uniqid(mt_rand(), true));
+        $tmpFilePath    = tempnam(sys_get_temp_dir(), $tmpFileName);
+        $archive        = file_get_contents(self::DATABASE_FILE_LINK);
+        $zip            = new \ZipArchive;
 
-        if ($newDatabaseFileArchive === false) {
+        try {
+            $path = $fileLocator->locate($configPath);
+        } catch (\Exception $e) {
+            $bundle = substr($configPath, 0, strrpos($configPath, '/'));
+            $file   = strrchr($configPath, '/');
+            $path   = $fileLocator->locate($bundle).$file;
+        }
+
+        if ($archive === false) {
             $output->writeln('<error>Cannot download new database file</error>');
         } else {
-            file_put_contents($tmpFilePath, $newDatabaseFileArchive);
+            file_put_contents($tmpFilePath, $archive);
         }
 
         if ($zip->open($tmpFilePath) === true) {

@@ -40,6 +40,7 @@ yamilovs_sypex_geo:
     mode: SXGEO_FILE # SXGEO_FILE (default) | SXGEO_BATCH | SXGEO_MEMORY
     database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
+> Don't forget to create @YourBundle/SypexGeoDatabase folder
 
 ### Step 4: Download necessary databases
 
