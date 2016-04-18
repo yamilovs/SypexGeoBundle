@@ -41,7 +41,7 @@ Download necessary databases to `src/YourCompanyName/YourBundle/SypexGeoDatabase
 ``` yaml
 # app/config/config.yml
 
-sypex_geo:
+yamilovs_sypex_geo:
     mode: SXGEO_FILE # SXGEO_FILE (default) | SXGEO_BATCH | SXGEO_MEMORY
     database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
@@ -61,7 +61,7 @@ class BarController extends Controller
     public function indexAction(Request $request)
     {
         /* @var $sypex_geo SypexGeoManager */
-        $sypex_geo = $this->get('sypex_geo.manager');
+        $sypex_geo = $this->get('yamilovs.sypex_geo.manager');
         $user_ip = $request->getClientIp();
         $test_ip = '8.8.8.8';
 

@@ -54,8 +54,8 @@ class SypexGeoManager {
         $this->container = $container;
         $this->kernel = $container->get('kernel');
 
-        $db_file = $this->kernel->locateResource($container->getParameter('sypex_geo.database_path'));
-        $type = $container->getParameter('sypex_geo.mode');
+        $db_file = $this->kernel->locateResource($container->getParameter('yamilovs_sypex_geo.database_path'));
+        $type = $container->getParameter('yamilovs_sypex_geo.mode');
 
         $this->fh = fopen($db_file, 'rb');
         // Сначала убеждаемся, что есть файл базы данных
