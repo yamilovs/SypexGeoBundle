@@ -26,7 +26,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new YamilovS\SypexGeoBundle\SypexGeoBundle(),
+        new YamilovS\SypexGeoBundle\YamilovSSypexGeoBundle(),
     );
 }
 ```
