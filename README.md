@@ -6,9 +6,9 @@ This is an adaptation of [Sypex Geo Library](https://sypexgeo.net/) for Symfony2
 Installation
 ------------
 
-### Step 1: Download YamilovSSypexGeoBundle using composer
+### Step 1: Download YamilovsSypexGeoBundle using composer
 
-Add YamilovSSypexGeoBundle by running the command:
+Add YamilovsSypexGeoBundle by running the command:
 
 ``` bash
 $ php composer.phar require yamilovs/sypex-geo-bundle dev-master
@@ -31,12 +31,7 @@ public function registerBundles()
 }
 ```
 
-### Step 3: Download necessary databases
-
-Download necessary databases to `src/YourCompanyName/YourBundle/SypexGeoDatabase` (or any other path of your choice). 
-- [Sypex Geo City](https://sypexgeo.net/files/SxGeoCity_utf8.zip)
-
-### Step 4: Add some configurations
+### Step 3: Add some configurations
 
 ``` yaml
 # app/config/config.yml
@@ -46,7 +41,16 @@ yamilovs_sypex_geo:
     database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
 
-### Step 5: In your controller
+### Step 4: Download necessary databases
+
+Download necessary databases to `database_path`. 
+- You can run `php/app console yamilovs:sypex-geo:update-database-file`
+- Or download it manually from [Sypex Geo City](https://sypexgeo.net/files/SxGeoCity_utf8.zip)
+
+Usage
+-----
+
+### In your controller
 ``` php
 <?php
 // src/Acme/FooBundle/Controller/BarController.php
@@ -74,3 +78,6 @@ class BarController extends Controller
 **Note:**
 
 > Your local ip address is 127.0.0.1 and Sypex Geo cant get your city or country!
+
+### If you want to check data from specific IP address
+You can run `php app/console yamilovs:sypex-geo:get-ip-data aa.bb.cc.dd`
