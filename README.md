@@ -49,7 +49,7 @@ yamilovs_sypex_geo:
     connection:
         proxy:
             host: 'xxx.xxx.xxx.xxx:port'
-            auth: 'ITLMDOMEN\user@password'
+            auth: 'ITLM_DOMEN\user:password'
 ```
 
 
