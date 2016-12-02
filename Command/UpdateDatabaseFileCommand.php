@@ -30,10 +30,10 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
         if (isset($connection['proxy'])) {
             $output->writeln('<info>Using proxy settings for connection</info>');
             $proxy = $connection['proxy'];
-            $https = [];
+            $http = [];
 
             if (isset($proxy['host'])) {
-                $https = array_merge_recursive($https, [
+                $http = array_merge_recursive($http, [
                     'method' => 'GET',
                     'request_fulluri' => true,
                     'timeout' => 10,
@@ -41,13 +41,13 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
                 ]);
             }
             if (isset($proxy['auth'])) {
-                $https = array_merge_recursive($https, [
+                $http = array_merge_recursive($http, [
                     'header' => [
                         'Proxy-Authorization: Basic ' . base64_encode($proxy['auth']),
                     ]
                 ]);
             }
-            $options['http'] = $https;
+            $options['http'] = $http;
         }
 
         return stream_context_create($options);
