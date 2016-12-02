@@ -41,7 +41,8 @@ yamilovs_sypex_geo:
     database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
-If you need proxy configuration? you can add:
+
+If you need proxy configuration, for database update, you can add:
 ``` yaml
 yamilovs_sypex_geo:
     ......
