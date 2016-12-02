@@ -41,6 +41,15 @@ yamilovs_sypex_geo:
     database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
 ```
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
+If you need proxy configuration? you can add:
+``` yaml
+yamilovs_sypex_geo:
+    ......
+    proxy:
+        host: 'xxx.xxx.xxx.xxx:port'
+        auth: 'ITLMDOMEN\user@password'
+```
+
 
 ### Step 4: Download necessary databases
 
