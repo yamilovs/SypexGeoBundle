@@ -24,6 +24,12 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('mode')->defaultValue('SXGEO_FILE')->end()
                 ->scalarNode('database_path')->defaultFalse()->end()
+                ->arrayNode('proxy')
+                    ->children()
+                        ->scalarNode('host')->defaultNull()->end()
+                        ->scalarNode('auth')->defaultNull()->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
@@ -34,3 +40,4 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 }
+
