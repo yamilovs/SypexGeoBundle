@@ -56,7 +56,7 @@ yamilovs_sypex_geo:
 ### Step 4: Download necessary databases
 
 Download necessary databases to `database_path`. 
-- You can run `php/app console yamilovs:sypex-geo:update-database-file`
+- You can run `php app/console yamilovs:sypex-geo:update-database-file`
 - Or download it manually from [Sypex Geo City](https://sypexgeo.net/files/SxGeoCity_utf8.zip)
 
 Usage
