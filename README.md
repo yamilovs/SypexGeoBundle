@@ -46,9 +46,10 @@ If you need proxy configuration for database update, you can add:
 ``` yaml
 yamilovs_sypex_geo:
     ......
-    proxy:
-        host: 'xxx.xxx.xxx.xxx:port'
-        auth: 'ITLMDOMEN\user@password'
+    connection:
+        proxy:
+            host: 'xxx.xxx.xxx.xxx:port'
+            auth: 'ITLMDOMEN\user@password'
 ```
 
 
