@@ -38,7 +38,7 @@ public function registerBundles()
 
 yamilovs_sypex_geo:
     mode: SXGEO_FILE # SXGEO_FILE (default) | SXGEO_BATCH | SXGEO_MEMORY
-    database_path: @YourBundle/SypexGeoDatabase/SxGeoCity.dat
+    database_path: "%kernel.root_dir%/../var/SypexGeoDatabase/SxGeoCity.dat"
 ```
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
 
