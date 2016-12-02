@@ -42,7 +42,7 @@ yamilovs_sypex_geo:
 ```
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
 
-If you need proxy configuration, for database update, you can add:
+If you need proxy configuration for database update, you can add:
 ``` yaml
 yamilovs_sypex_geo:
     ......
