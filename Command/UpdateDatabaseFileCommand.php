@@ -18,13 +18,42 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
             ->setDescription('Download and extract new database file to database path')
         ;
     }
+    
+    protected function createContext(OutputInterface $out)
+    {
+        $proxy = $this->getContainer()->getParameter('yamilovs_sypex_geo.proxy');
+        if (!empty($proxy['host'])){
+            $arr = [
+                'method' => 'GET',
+                'timeout' => 10,
+                'proxy' => 'tcp://'.$proxy['host'],
+                'request_fulluri' => true,
+            ];
+            $out->writeln("<info>Use proxy: {$proxy['host']}</info>");
+            if (!empty($proxy['auth'])){
+                $out->writeln("<info>Use proxy auth</info>");
+                $auth = $auth = base64_encode($proxy['auth']);
+                $arr['header'] = "Proxy-Authorization: Basic $auth";
+            }
+            $context = stream_context_create(
+                [
+                    'http' => $arr
+                ]
+            );
+        }else{
+            $context = stream_context_create();
+        }
+        return $context;
+    }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $configPath     = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
         $fileLocator    = $this->getContainer()->get('file_locator');
         $tmpFileName    = sha1(uniqid(mt_rand(), true));
         $tmpFilePath    = tempnam(sys_get_temp_dir(), $tmpFileName);
-        $archive        = file_get_contents(self::DATABASE_FILE_LINK);
+        $streamContext  = $this->createContext($output);
+        $output->writeln("<info>Load database from ".self::DATABASE_FILE_LINK."</info>");
+        $archive        = file_get_contents(self::DATABASE_FILE_LINK, null, $streamContext);
         $zip            = new \ZipArchive;
 
         try {
