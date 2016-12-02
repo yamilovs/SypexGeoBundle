@@ -2,16 +2,13 @@
 
 namespace YamilovS\SypexGeoBundle\Manager;
 
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Config\FileLocator;
 
-class SypexGeoManager {
-
+class SypexGeoManager
+{
     CONST SXGEO_FILE = 0;
     CONST SXGEO_MEMORY = 1;
     CONST SXGEO_BATCH = 2;
-
-    private $container;
-    private $kernel;
 
     protected $fh;
     protected $ip1c;
@@ -50,13 +47,9 @@ class SypexGeoManager {
     public $batch_mode  = false;
     public $memory_mode = false;
 
-    public function __construct(Container $container) {
-        $this->container = $container;
-        $this->kernel = $container->get('kernel');
-
-        $db_file = $this->kernel->locateResource($container->getParameter('yamilovs_sypex_geo.database_path'));
-        $type = $container->getParameter('yamilovs_sypex_geo.mode');
-
+    public function __construct(FileLocator $fileLocator, $mode, $databasePath)
+    {
+        $db_file = $fileLocator->locate($databasePath);
         $this->fh = fopen($db_file, 'rb');
         // Сначала убеждаемся, что есть файл базы данных
         $header = fread($this->fh, 40); // В версии 2.2 заголовок увеличился на 8 байт
@@ -73,8 +66,8 @@ class SypexGeoManager {
         $this->max_city    = $info['max_city'];
         $this->max_country = $info['max_country'];
         $this->country_size= $info['country_size'];
-        $this->batch_mode  = $type & self::SXGEO_BATCH;
-        $this->memory_mode = $type & self::SXGEO_MEMORY;
+        $this->batch_mode  = $mode & self::SXGEO_BATCH;
+        $this->memory_mode = $mode & self::SXGEO_MEMORY;
         $this->pack        = $info['pack_size'] ? explode("\0", fread($this->fh, $info['pack_size'])) : '';
         $this->b_idx_str   = fread($this->fh, $info['b_idx_len'] * 4);
         $this->m_idx_str   = fread($this->fh, $info['m_idx_len'] * 4);
