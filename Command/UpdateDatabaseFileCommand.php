@@ -43,11 +43,11 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
             if (isset($proxy['auth'])) {
                 $https = array_merge_recursive($https, [
                     'header' => [
-                        'Proxy-Authorization: Basic ' . $proxy['auth'],
+                        'Proxy-Authorization: Basic ' . base64_encode($proxy['auth']),
                     ]
                 ]);
             }
-            $options['https'] = $https;
+            $options['http'] = $https;
         }
 
         return stream_context_create($options);
