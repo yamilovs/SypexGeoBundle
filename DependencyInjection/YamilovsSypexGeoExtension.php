@@ -27,5 +27,8 @@ class YamilovsSypexGeoExtension extends Extension
 
         $container->setParameter('yamilovs_sypex_geo.database_path', $config['database_path']);
         $container->setParameter('yamilovs_sypex_geo.mode', $config['mode']);
+        if (isset($config['proxy'])) {
+            $container->setParameter('yamilovs_sypex_geo.proxy', $config['proxy']);
+        }
     }
 }
