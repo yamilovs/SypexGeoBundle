@@ -5,34 +5,71 @@ namespace YamilovS\SypexGeoBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 class UpdateDatabaseFileCommand extends ContainerAwareCommand
 {
     const DATABASE_FILE_LINK = 'https://sypexgeo.net/files/SxGeoCity_utf8.zip';
     const DATABASE_FILE_NAME = 'SxGeoCity.dat';
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setName('yamilovs:sypex-geo:update-database-file')
-            ->setDescription('Download and extract new database file to database path')
-        ;
+            ->setDescription('Download and extract new database file to database path');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
-        $configPath     = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
-        $fileLocator    = $this->getContainer()->get('file_locator');
-        $tmpFileName    = sha1(uniqid(mt_rand(), true));
-        $tmpFilePath    = tempnam(sys_get_temp_dir(), $tmpFileName);
-        $archive        = file_get_contents(self::DATABASE_FILE_LINK);
-        $zip            = new \ZipArchive;
+    protected function getStreamContext(OutputInterface $output)
+    {
+        $connection = $this->getContainer()->getParameter('yamilovs_sypex_geo.connection');
+        $options = [];
+
+        if (empty($connection)) {
+            return null;
+        }
+
+        if (isset($connection['proxy'])) {
+            $output->writeln('<info>Using proxy settings for connection</info>');
+            $proxy = $connection['proxy'];
+            $http = [];
+
+            if (isset($proxy['host'])) {
+                $http = array_merge_recursive($http, [
+                    'method' => 'GET',
+                    'request_fulluri' => true,
+                    'timeout' => 10,
+                    'proxy' => 'tcp://' . $proxy['host'],
+                ]);
+            }
+            if (isset($proxy['auth'])) {
+                $http = array_merge_recursive($http, [
+                    'header' => [
+                        'Proxy-Authorization: Basic ' . base64_encode($proxy['auth']),
+                    ]
+                ]);
+            }
+            $options['http'] = $http;
+        }
+
+        return stream_context_create($options);
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $configPath = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
+        $fileLocator = $this->getContainer()->get('file_locator');
+        $tmpFileName = sha1(uniqid(mt_rand(), true));
+        $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
+        $archive = file_get_contents(self::DATABASE_FILE_LINK, false, $this->getStreamContext($output));
+        $zip = new \ZipArchive;
+
+        $output->writeln('<info>Load database from ' . self::DATABASE_FILE_LINK . '</info>');
 
         try {
             $path = $fileLocator->locate($configPath);
         } catch (\Exception $e) {
             $bundle = substr($configPath, 0, strrpos($configPath, '/'));
-            $file   = strrchr($configPath, '/');
-            $path   = $fileLocator->locate($bundle).$file;
+            $file = strrchr($configPath, '/');
+            $path = $fileLocator->locate($bundle) . $file;
         }
 
         if ($archive === false) {
@@ -45,10 +82,9 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
             $newDatabaseFile = $zip->getFromName(self::DATABASE_FILE_NAME);
             file_put_contents($path, $newDatabaseFile);
             $zip->close();
+            $output->writeln("<info>New database file was saved to: $path</info>");
         } else {
             $output->writeln('<error>Cannot open zip archive</error>');
         }
-
-        $output->writeln("<info>New database file was saved to: $path</info>");
     }
 }

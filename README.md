@@ -42,6 +42,17 @@ yamilovs_sypex_geo:
 ```
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
 
+If you need proxy configuration for database update, you can add:
+``` yaml
+yamilovs_sypex_geo:
+    ......
+    connection:
+        proxy:
+            host: 'xxx.xxx.xxx.xxx:port'
+            auth: 'ITLM_DOMEN\user:password'
+```
+
+
 ### Step 4: Download necessary databases
 
 Download necessary databases to `database_path`. 
