@@ -55,8 +55,8 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configPath = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
-        $fileLocator = $this->getContainer()->get('file_locator');
+        $databasePath = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
+        $filesystem = $this->getContainer()->get('filesystem');
         $tmpFileName = sha1(uniqid(mt_rand(), true));
         $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
         $archive = file_get_contents(self::DATABASE_FILE_LINK, false, $this->getStreamContext($output));
@@ -64,25 +64,18 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
 
         $output->writeln('<info>Load database from ' . self::DATABASE_FILE_LINK . '</info>');
 
-        try {
-            $path = $fileLocator->locate($configPath);
-        } catch (\Exception $e) {
-            $bundle = substr($configPath, 0, strrpos($configPath, '/'));
-            $file = strrchr($configPath, '/');
-            $path = $fileLocator->locate($bundle) . $file;
-        }
-
         if ($archive === false) {
             $output->writeln('<error>Cannot download new database file</error>');
         } else {
-            file_put_contents($tmpFilePath, $archive);
+            $filesystem->dumpFile($tmpFileName, $archive);
         }
 
         if ($zip->open($tmpFilePath) === true) {
             $newDatabaseFile = $zip->getFromName(self::DATABASE_FILE_NAME);
-            file_put_contents($path, $newDatabaseFile);
+            $filesystem->dumpFile($databasePath, $newDatabaseFile);
             $zip->close();
-            $output->writeln("<info>New database file was saved to: $path</info>");
+            $filesystem->remove($tmpFilePath);
+            $output->writeln("<info>New database file was saved to: $databasePath</info>");
         } else {
             $output->writeln('<error>Cannot open zip archive</error>');
         }
