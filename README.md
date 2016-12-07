@@ -10,15 +10,15 @@ Installation
 
 Add YamilovsSypexGeoBundle by running the command:
 
-``` bash
-$ php composer.phar require yamilovs/sypex-geo-bundle dev-master
+```bash
+$ php composer.phar require yamilovs/sypex-geo-bundle ^1.2
 ```
 
 ### Step 2: Enable the bundle
 
 Enable the bundle in the kernel:
 
-``` php
+```php
 <?php
 // app/AppKernel.php
 
@@ -33,7 +33,7 @@ public function registerBundles()
 
 ### Step 3: Add some configurations
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 yamilovs_sypex_geo:
@@ -43,7 +43,7 @@ yamilovs_sypex_geo:
 > Don't forget to create @YourBundle/SypexGeoDatabase folder
 
 If you need proxy configuration for database update, you can add:
-``` yaml
+```yaml
 yamilovs_sypex_geo:
     ......
     connection:
@@ -63,7 +63,7 @@ Usage
 -----
 
 ### In your controller
-``` php
+```php
 <?php
 // src/Acme/FooBundle/Controller/BarController.php
 namespace Acme\FooBundle\Controller;
