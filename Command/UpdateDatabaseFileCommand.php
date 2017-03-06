@@ -60,22 +60,30 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
         $tmpFileName = sha1(uniqid(mt_rand(), true));
         $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
         $archive = file_get_contents(self::DATABASE_FILE_LINK, false, $this->getStreamContext($output));
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
 
         $output->writeln('<info>Load database from ' . self::DATABASE_FILE_LINK . '</info>');
 
         if ($archive === false) {
             $output->writeln('<error>Cannot download new database file</error>');
         } else {
-            $filesystem->dumpFile($tmpFileName, $archive);
+            $filesystem->dumpFile($tmpFilePath, $archive);
         }
 
         if ($zip->open($tmpFilePath) === true) {
+            $fileLocator = $this->getContainer()->get('file_locator');
+            try {
+                $databaseTruePath = $fileLocator->locate($databasePath);
+            }catch (\InvalidArgumentException $e){
+                $kernel = $this->getContainer()->get('kernel');
+                $dir = $kernel->getRootDir()."/../src/";
+                $databaseTruePath = str_replace("@", $dir, $databasePath);
+            }
             $newDatabaseFile = $zip->getFromName(self::DATABASE_FILE_NAME);
-            $filesystem->dumpFile($databasePath, $newDatabaseFile);
+            $filesystem->dumpFile($databaseTruePath, $newDatabaseFile);
             $zip->close();
             $filesystem->remove($tmpFilePath);
-            $output->writeln("<info>New database file was saved to: $databasePath</info>");
+            $output->writeln("<info>New database file was saved to: $databaseTruePath</info>");
         } else {
             $output->writeln('<error>Cannot open zip archive</error>');
         }
