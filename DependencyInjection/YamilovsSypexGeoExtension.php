@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -26,7 +27,24 @@ class YamilovsSypexGeoExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter($this->getAlias().'.database_path', $config['database_path']);
-        $container->setParameter($this->getAlias().'.mode', $config['mode']);
+        $container->setParameter($this->getAlias().'.mode', $this->modeToInt($config['mode']));
         $container->setParameter($this->getAlias().'.connection', $config['connection']);
+    }
+
+    /**
+     * @param string|int $mode
+     * @return int
+     */
+    private function modeToInt($mode)
+    {
+        if (is_int($mode)){
+            return (int)$mode;
+        }
+        $reflectionClass = new \ReflectionClass(SypexGeoManager::class);
+        $constants = $reflectionClass->getConstants();
+        if (isset($constants[$mode])){
+            return (int)$constants[$mode];
+        }
+        return 0;
     }
 }
