@@ -6,9 +6,9 @@ use Symfony\Component\Config\FileLocator;
 
 class SypexGeoManager
 {
-    CONST SXGEO_FILE = 0;
-    CONST SXGEO_MEMORY = 1;
-    CONST SXGEO_BATCH = 2;
+    const SXGEO_FILE = 0;
+    const SXGEO_MEMORY = 1;
+    const SXGEO_BATCH = 2;
 
     protected $fh;
     protected $ip1c;
@@ -89,6 +89,14 @@ class SypexGeoManager
         $this->info['cities_begin']  = $this->info['regions_begin'] + $info['region_size'];
     }
 
+    public static function getAvailableModes()
+    {
+        return [
+            'SXGEO_FILE'   => self::SXGEO_FILE,
+            'SXGEO_MEMORY' => self::SXGEO_MEMORY,
+            'SXGEO_BATCH'  => self::SXGEO_BATCH,
+        ];
+    }
 
     protected function search_idx($ipn, $min, $max){
         if($this->batch_mode){
