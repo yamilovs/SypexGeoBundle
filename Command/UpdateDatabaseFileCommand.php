@@ -60,14 +60,14 @@ class UpdateDatabaseFileCommand extends ContainerAwareCommand
         $tmpFileName = sha1(uniqid(mt_rand(), true));
         $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
         $archive = file_get_contents(self::DATABASE_FILE_LINK, false, $this->getStreamContext($output));
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
 
         $output->writeln('<info>Load database from ' . self::DATABASE_FILE_LINK . '</info>');
 
         if ($archive === false) {
             $output->writeln('<error>Cannot download new database file</error>');
         } else {
-            $filesystem->dumpFile($tmpFileName, $archive);
+            $filesystem->dumpFile($tmpFilePath, $archive);
         }
 
         if ($zip->open($tmpFilePath) === true) {
