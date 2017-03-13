@@ -8,4 +8,4 @@ php:
   - hhvm
 
 before_script: composer install --dev --prefer-source
-script: phpunit --debug --coverage-text
+script: ./vendor/bin/phpunit --debug --coverage-text
