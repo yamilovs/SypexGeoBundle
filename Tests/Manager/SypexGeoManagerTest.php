@@ -1,6 +1,6 @@
 <?php
 
-namespace YamilovS\SypexGeoBundle\Tests\Manager;
+namespace Yamilovs\SypexGeoBundle\Tests\Manager;
 
 use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
 
