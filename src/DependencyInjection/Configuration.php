@@ -1,6 +1,6 @@
 <?php
 
-namespace Yamilovs\SypexGeoBundle\DependencyInjection;
+namespace Yamilovs\Bundle\SypexGeoBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

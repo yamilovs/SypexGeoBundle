@@ -15,12 +15,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Yamilovs\\SypexGeoBundle\\": "src/"
+            "Yamilovs\\Bundle\\SypexGeoBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Yamilovs\\SypexGeoBundle\\Tests\\": "tests/"
+            "Yamilovs\\Bundle\\SypexGeoBundle\\Tests\\": "tests/"
         }
     },
     "require": {

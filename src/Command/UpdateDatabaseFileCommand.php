@@ -1,6 +1,6 @@
 <?php
 
-namespace Yamilovs\SypexGeoBundle\Command;
+namespace Yamilovs\Bundle\SypexGeoBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
