@@ -26,11 +26,10 @@
   "require": {
     "php": "^7.2",
     "ext-zip": "*",
-    "yamilovs/sypex-geo": "^1.0"
+    "yamilovs/sypex-geo": "^1.0",
+    "symfony/framework-bundle": "^3.4|^4.2"
   },
   "require-dev": {
-    "symfony/framework-bundle": "~2.3|~3.0",
-    "symfony/console": "~2.3|~3.0",
     "phpunit/phpunit": "^8.3"
   }
 }
