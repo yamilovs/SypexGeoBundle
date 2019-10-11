@@ -2,9 +2,10 @@
 
 namespace Yamilovs\SypexGeoBundle\Tests\Manager;
 
+use PHPUnit\Framework\TestCase;
 use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
 
-class SypexGeoManagerTest extends \PHPUnit_Framework_TestCase
+class SypexGeoManagerTest extends TestCase
 {
     public function testGetAvailableModes()
     {
