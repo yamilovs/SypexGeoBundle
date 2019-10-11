@@ -1,35 +1,35 @@
 {
-  "name": "yamilovs/sypex-geo-bundle",
-  "description": "An adaptation of Sypex Geo library to Symfony2",
-  "homepage": "https://github.com/yamilovs/SypexGeoBundle",
-  "type": "symfony-bundle",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Yamilov Stepan",
-      "email": "yamilovs@gmail.com"
+    "name": "yamilovs/sypex-geo-bundle",
+    "description": "An adaptation of SypexGeo library to Symfony Bundle system",
+    "keywords": [
+        "sypexgeo", "position", "ip location", "geoip"
+    ],
+    "homepage": "https://github.com/yamilovs/SypexGeoBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yamilov Stepan",
+            "email": "yamilovs@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Yamilovs\\SypexGeoBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yamilovs\\SypexGeoBundle\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "ext-zip": "*",
+        "yamilovs/sypex-geo": "^1.0",
+        "symfony/framework-bundle": "^3.4|^4.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3"
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Yamilovs\\SypexGeoBundle\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Yamilovs\\SypexGeoBundle\\Tests\\": "tests/"
-    }
-  },
-  "keywords": [
-    "Geo location"
-  ],
-  "require": {
-    "php": "^7.2",
-    "ext-zip": "*",
-    "yamilovs/sypex-geo": "^1.0",
-    "symfony/framework-bundle": "^3.4|^4.2"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^8.3"
-  }
 }
