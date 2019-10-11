@@ -25,7 +25,8 @@
   ],
   "require": {
     "php": "^7.2",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "yamilovs/sypex-geo": "^1.0"
   },
   "require-dev": {
     "symfony/framework-bundle": "~2.3|~3.0",
