@@ -1,6 +1,6 @@
 <?php
 
-namespace YamilovS\SypexGeoBundle;
+namespace Yamilovs\SypexGeoBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
