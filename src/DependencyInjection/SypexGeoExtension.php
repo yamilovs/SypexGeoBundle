@@ -4,47 +4,30 @@ namespace Yamilovs\Bundle\SypexGeoBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Yamilovs\SypexGeo\Database\Mode;
 
-/**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class SypexGeoExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-
-        $container->setParameter($this->getAlias() . '.database_path', $config['database_path']);
-        $container->setParameter($this->getAlias() . '.mode', self::convertModeToInt($config['mode']));
-        $container->setParameter($this->getAlias() . '.connection', $config['connection']);
+        $container->setParameter(sprintf('%s.database_path', $this->getAlias()), $config['database_path']);
+        $container->setParameter(sprintf('%s.mode', $this->getAlias()), self::convertModeToInt($config['mode']));
+        $container->setParameter(sprintf('%s.connection', $this->getAlias()), $config['connection']);
     }
 
-    private static function convertModeToInt($mode)
+    private static function convertModeToInt(string $mode): int
     {
-        $availableModes = SypexGeoManager::getAvailableModes();
+        $modes = Mode::getModes();
 
-        if (is_int($mode)) {
-            if (in_array($mode, $availableModes)) {
-                return $mode;
-            }
-        } else {
-            if (array_key_exists($mode, $availableModes)) {
-                return $availableModes[$mode];
-            }
-        }
-
-        return SypexGeoManager::SXGEO_FILE;
+        return array_key_exists($mode, $modes) ? $modes[$mode] : Mode::FILE;
     }
 
     public function getAlias(): string
