@@ -1,6 +1,6 @@
 services:
     yamilovs.sypex_geo.manager:
-        class: YamilovS\SypexGeoBundle\Manager\SypexGeoManager
+        class: Yamilovs\SypexGeoBundle\Manager\SypexGeoManager
         arguments:
             - "@file_locator"
             - "%yamilovs_sypex_geo.mode%"

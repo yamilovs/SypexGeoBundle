@@ -1,6 +1,6 @@
 <?php
 
-namespace YamilovS\SypexGeoBundle\Manager;
+namespace Yamilovs\SypexGeoBundle\Manager;
 
 use Symfony\Component\Config\FileLocator;
 

@@ -71,7 +71,7 @@ namespace Acme\FooBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
+use Yamilovs\SypexGeoBundle\Manager\SypexGeoManager;
 
 class BarController extends Controller
 {

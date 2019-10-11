@@ -3,7 +3,7 @@
 namespace Yamilovs\SypexGeoBundle\Tests\Manager;
 
 use PHPUnit\Framework\TestCase;
-use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
+use Yamilovs\SypexGeoBundle\Manager\SypexGeoManager;
 
 class SypexGeoManagerTest extends TestCase
 {

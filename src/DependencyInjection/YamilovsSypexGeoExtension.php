@@ -6,7 +6,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use YamilovS\SypexGeoBundle\Manager\SypexGeoManager;
+use Yamilovs\SypexGeoBundle\Manager\SypexGeoManager;
 
 /**
  * This is the class that loads and manages your bundle configuration

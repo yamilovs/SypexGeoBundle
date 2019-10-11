@@ -3,17 +3,25 @@
   "description": "An adaptation of Sypex Geo library to Symfony2",
   "homepage": "https://github.com/yamilovs/SypexGeoBundle",
   "type": "symfony-bundle",
+  "license": "MIT",
   "authors": [
     {
       "name": "Yamilov Stepan",
       "email": "yamilovs@gmail.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "Yamilovs\\SypexGeoBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Yamilovs\\SypexGeoBundle\\Tests\\": "tests/"
+    }
+  },
   "keywords": [
     "Geo location"
-  ],
-  "license": [
-    "MIT"
   ],
   "require": {
     "php": "^7.2",
@@ -23,10 +31,5 @@
     "symfony/framework-bundle": "~2.3|~3.0",
     "symfony/console": "~2.3|~3.0",
     "phpunit/phpunit": "^8.3"
-  },
-  "autoload": {
-    "psr-4": {
-      "YamilovS\\SypexGeoBundle\\": ""
-    }
   }
 }
