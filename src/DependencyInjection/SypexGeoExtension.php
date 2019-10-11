@@ -46,4 +46,9 @@ class SypexGeoExtension extends Extension
 
         return SypexGeoManager::SXGEO_FILE;
     }
+
+    public function getAlias(): string
+    {
+        return 'yamilovs_sypex_geo';
+    }
 }
