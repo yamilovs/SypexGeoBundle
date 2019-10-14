@@ -3,17 +3,17 @@
 SypexGeoBundle
 ==============
 
-This is an adaptation of [Sypex Geo Library](https://sypexgeo.net/) for Symfony2.
+This is an adaptation of [Sypex Geo Library](https://github.com/yamilovs/SypexGeo) for Symfony.
  
 Installation
 ------------
 
-### Step 1: Download YamilovsSypexGeoBundle using composer
+### Step 1: Download SypexGeoBundle using composer
 
-Add YamilovsSypexGeoBundle by running the command:
+Add SypexGeoBundle by running the command:
 
 ```bash
-$ php composer.phar require yamilovs/sypex-geo-bundle ^1.2
+$ composer require yamilovs/sypex-geo-bundle:^2.0
 ```
 
 ### Step 2: Enable the bundle
@@ -28,7 +28,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Yamilovs\SypexGeoBundle\YamilovsSypexGeoBundle(),
+        new Yamilovs\Bundle\SypexGeoBundle\SypexGeoBundle(),
     );
 }
 ```
@@ -39,25 +39,30 @@ public function registerBundles()
 # app/config/config.yml
 
 yamilovs_sypex_geo:
-    mode: SXGEO_FILE # SXGEO_FILE (default) | SXGEO_BATCH | SXGEO_MEMORY
+    mode: FILE # FILE (default) | BATCH | MEMORY
     database_path: "%kernel.root_dir%/../var/SypexGeoDatabase/SxGeoCity.dat"
 ```
 
-If you need proxy configuration for database update, you can add:
+If you need the proxy configuration for database update, you can add:
 ```yaml
 yamilovs_sypex_geo:
     ......
     connection:
         proxy:
-            host: 'xxx.xxx.xxx.xxx:port'
-            auth: 'ITLM_DOMEN\user:password'
+            host: 'xxx.xxx.xxx.xxx'
+            port: # port number
+            
+            # You can enable user credentials if you have them
+            auth:
+                user: 'your username'
+                password: 'your password'
 ```
 
 
 ### Step 4: Download necessary databases
 
 Download necessary databases to `database_path`. 
-- You can run `php app/console yamilovs:sypex-geo:update-database-file`
+- You can run `php bin/console yamilovs:sypex-geo:update-database-file`
 - Or download it manually from [Sypex Geo City](https://sypexgeo.net/files/SxGeoCity_utf8.zip)
 
 Usage
@@ -66,24 +71,23 @@ Usage
 ### In your controller
 ```php
 <?php
-// src/Acme/FooBundle/Controller/BarController.php
-namespace Acme\FooBundle\Controller;
+// src/Controller/FooController.php
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Yamilovs\SypexGeoBundle\Manager\SypexGeoManager;
+use Yamilovs\SypexGeo\SypexGeo;
 
-class BarController extends Controller
+class FooController extends Controller
 {
-    public function indexAction(Request $request)
+    public function fooAction(Request $request, SypexGeo $sypexGeo)
     {
-        /* @var $sypex_geo SypexGeoManager */
-        $sypex_geo = $this->get('yamilovs.sypex_geo.manager');
-        $user_ip = $request->getClientIp();
-        $test_ip = '8.8.8.8';
+        $userIp = $request->getClientIp();
+        $testIp = '88.86.218.24';
 
-        $city_data = $sypex_geo->getCity($test_ip);
-        dump($city_data);
+        $city = $sypexGeo->getCity($testIp, true);
+
+        dump($city);
     }
 }
 ```
@@ -93,4 +97,4 @@ class BarController extends Controller
 > Your local ip address is 127.0.0.1 and Sypex Geo cant get your city or country!
 
 ### If you want to check data from specific IP address
-You can run `php app/console yamilovs:sypex-geo:get-ip-data aa.bb.cc.dd`
+You can run `php bin/console yamilovs:sypex-geo:get-ip-data aa.bb.cc.dd`
