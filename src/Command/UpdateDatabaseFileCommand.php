@@ -1,83 +1,117 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yamilovs\Bundle\SypexGeoBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 
-class UpdateDatabaseFileCommand extends ContainerAwareCommand
+class UpdateDatabaseFileCommand extends Command
 {
-    const DATABASE_FILE_LINK = 'https://sypexgeo.net/files/SxGeoCity_utf8.zip';
-    const DATABASE_FILE_NAME = 'SxGeoCity.dat';
+    private const DATABASE_FILE_LINK = 'https://sypexgeo.net/files/SxGeoCity_utf8.zip';
+    private const DATABASE_FILE_NAME = 'SxGeoCity.dat';
 
-    protected function configure()
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private $databasePath;
+
+    /**
+     * @var array
+     */
+    private $connection;
+
+    public function __construct(Filesystem $filesystem, string $databasePath, array $connection)
+    {
+        parent::__construct();
+
+        $this->filesystem = $filesystem;
+        $this->databasePath = $databasePath;
+        $this->connection = $connection;
+    }
+
+    protected function configure(): void
     {
         $this
             ->setName('yamilovs:sypex-geo:update-database-file')
             ->setDescription('Download and extract new database file to database path');
     }
 
-    protected function getStreamContext(OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $connection = $this->getContainer()->getParameter('yamilovs_sypex_geo.connection');
-        $options = [];
+        $io = new SymfonyStyle($input, $output);
+        $zip = new \ZipArchive();
+        $client = new Client();
 
-        if (empty($connection)) {
-            return null;
+        $io->note(sprintf('Loading database archive file from "%s"', static::DATABASE_FILE_LINK));
+
+        $tmpFilePath = tempnam(sys_get_temp_dir(), sha1(uniqid((string)mt_rand(), true)));
+
+        $settings = [
+            'sink' => $tmpFilePath,
+        ];
+
+        $settings = $this->addProxySettings($settings, $io);
+        $settings = $this->addAuthSettings($settings, $io);
+
+        try {
+            $client->request(Request::METHOD_GET, static::DATABASE_FILE_LINK, $settings);
+        } catch (GuzzleException $e) {
+            $io->error(sprintf('%d: %s', $e->getCode(), $e->getMessage()));
+            return;
         }
 
-        if (isset($connection['proxy'])) {
-            $output->writeln('<info>Using proxy settings for connection</info>');
-            $proxy = $connection['proxy'];
-            $http = [];
-
-            if (isset($proxy['host'])) {
-                $http = array_merge_recursive($http, [
-                    'method' => 'GET',
-                    'request_fulluri' => true,
-                    'timeout' => 10,
-                    'proxy' => 'tcp://' . $proxy['host'],
-                ]);
-            }
-            if (isset($proxy['auth'])) {
-                $http = array_merge_recursive($http, [
-                    'header' => [
-                        'Proxy-Authorization: Basic ' . base64_encode($proxy['auth']),
-                    ]
-                ]);
-            }
-            $options['http'] = $http;
+        if (true !== $zip->open($tmpFilePath)) {
+            $io->error('Can\'t open database archive');
+            return;
         }
 
-        return stream_context_create($options);
+        $databaseFile = $zip->getFromName(static::DATABASE_FILE_NAME);
+        $this->filesystem->dumpFile($this->databasePath, $databaseFile);
+        $this->filesystem->remove($tmpFilePath);
+
+        $zip->close();
+
+        $io->success(sprintf('New database file was saved to "%s"', realpath($this->databasePath)));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    private function addProxySettings(array $settings, SymfonyStyle $io): array
     {
-        $databasePath = $this->getContainer()->getParameter('yamilovs_sypex_geo.database_path');
-        $filesystem = $this->getContainer()->get('filesystem');
-        $tmpFileName = sha1(uniqid(mt_rand(), true));
-        $tmpFilePath = tempnam(sys_get_temp_dir(), $tmpFileName);
-        $archive = file_get_contents(self::DATABASE_FILE_LINK, false, $this->getStreamContext($output));
-        $zip = new \ZipArchive();
+        $host = $this->connection['proxy']['host'] ?? null;
+        $port = $this->connection['proxy']['port'] ?? null;
 
-        $output->writeln('<info>Load database from ' . self::DATABASE_FILE_LINK . '</info>');
+        if ($host && $port) {
+            $settings = array_merge($settings, ['proxy' => sprintf('http://%s:%d', $host, $port)]);
 
-        if ($archive === false) {
-            $output->writeln('<error>Cannot download new database file</error>');
-        } else {
-            $filesystem->dumpFile($tmpFilePath, $archive);
+            $io->note(sprintf('Using proxy "%s:%d" for connection', $host, $port));
         }
 
-        if ($zip->open($tmpFilePath) === true) {
-            $newDatabaseFile = $zip->getFromName(self::DATABASE_FILE_NAME);
-            $filesystem->dumpFile($databasePath, $newDatabaseFile);
-            $zip->close();
-            $filesystem->remove($tmpFilePath);
-            $output->writeln("<info>New database file was saved to: $databasePath</info>");
-        } else {
-            $output->writeln('<error>Cannot open zip archive</error>');
+        return $settings;
+    }
+
+    private function addAuthSettings(array $settings, SymfonyStyle $io): array
+    {
+        $user = $this->connection['proxy']['auth']['user'] ?? null;
+        $password = $this->connection['proxy']['auth']['password'] ?? null;
+
+        if ($user && $password) {
+            $settings = array_merge($settings, ['auth' => [$user, $password]]);
+
+            $io->note(sprintf('With authorization "%s:%s"', $user, $password));
         }
+
+        return $settings;
     }
 }
