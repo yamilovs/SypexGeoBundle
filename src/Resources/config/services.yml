@@ -3,3 +3,8 @@ services:
         arguments:
             - "%yamilovs_sypex_geo.database_path%"
             - "%yamilovs_sypex_geo.mode%"
+            -
+    Yamilovs\Bundle\SypexGeoBundle\Command\GetIpDataCommand:
+        arguments: ['@Yamilovs\SypexGeo\SypexGeo']
+        tags:
+            - { name: 'console.command', command: 'yamilovs:sypex-geo:get-ip-data' }
