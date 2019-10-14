@@ -12,7 +12,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('yamilovs_sypex_geo');
+        $treeBuilder = new TreeBuilder();
 
         $rootNode = $treeBuilder->root('yamilovs_sypex_geo');
 
