@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yamilovs\Bundle\SypexGeoBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
