@@ -1,0 +1,18 @@
+services:
+    Yamilovs\SypexGeo\SypexGeo:
+        arguments:
+            - "%yamilovs_sypex_geo.database_path%"
+            - "%yamilovs_sypex_geo.mode%"
+            -
+    Yamilovs\Bundle\SypexGeoBundle\Command\GetIpDataCommand:
+        arguments: ['@Yamilovs\SypexGeo\SypexGeo']
+        tags:
+            - { name: 'console.command', command: 'yamilovs:sypex-geo:get-ip-data' }
+
+    Yamilovs\Bundle\SypexGeoBundle\Command\UpdateDatabaseFileCommand:
+        arguments:
+            - '@filesystem'
+            - '%yamilovs_sypex_geo.database_path%'
+            - '%yamilovs_sypex_geo.connection%'
+        tags:
+            - { name: 'console.command', command: 'yamilovs:sypex-geo:update-database-file' }

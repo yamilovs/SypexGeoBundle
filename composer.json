@@ -1,32 +1,40 @@
 {
-  "name": "yamilovs/sypex-geo-bundle",
-  "description": "An adaptation of Sypex Geo library to Symfony2",
-  "homepage": "https://github.com/yamilovs/SypexGeoBundle",
-  "type": "symfony-bundle",
-  "authors": [
-    {
-      "name": "Yamilov Stepan",
-      "email": "yamilovs@gmail.com"
+    "name": "yamilovs/sypex-geo-bundle",
+    "description": "An adaptation of SypexGeo library to Symfony Bundle system",
+    "keywords": [
+        "sypexgeo", "position", "ip location", "geoip"
+    ],
+    "homepage": "https://github.com/yamilovs/SypexGeoBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yamilov Stepan",
+            "email": "yamilovs@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Yamilovs\\Bundle\\SypexGeoBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yamilovs\\Bundle\\SypexGeoBundle\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "ext-zip": "*",
+        "guzzlehttp/guzzle": "^6.0",
+        "symfony/framework-bundle": "^3.4|^4.2",
+        "yamilovs/sypex-geo": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3",
+        "symfony/console": "^3.4|^4.2"
+    },
+    "config": {
+        "sort-packages": true
     }
-  ],
-  "keywords": [
-    "Geo location"
-  ],
-  "license": [
-    "MIT"
-  ],
-  "require": {
-    "php": ">=5.5.9",
-    "ext-zip": "*"
-  },
-  "require-dev": {
-    "symfony/framework-bundle": "~2.3|~3.0",
-    "symfony/console": "~2.3|~3.0",
-    "phpunit/phpunit": "~4.8|~5.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "YamilovS\\SypexGeoBundle\\": ""
-    }
-  }
 }

@@ -1,7 +1,0 @@
-services:
-    yamilovs.sypex_geo.manager:
-        class: YamilovS\SypexGeoBundle\Manager\SypexGeoManager
-        arguments:
-            - "@file_locator"
-            - "%yamilovs_sypex_geo.mode%"
-            - "%yamilovs_sypex_geo.database_path%"
