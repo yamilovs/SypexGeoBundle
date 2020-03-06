@@ -12,9 +12,14 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('yamilovs_sypex_geo');
 
-        $rootNode = $treeBuilder->root('yamilovs_sypex_geo');
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $treeBuilder->root('yamilovs_sypex_geo');
+        }
 
         $rootNode
             ->children()
